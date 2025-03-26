@@ -100,7 +100,7 @@ const Register = () => {
         }
         
         try {
-            await axios.post("http://localhost:5000/api/auth/register", { name, email, password, role });
+            await axios.post("https://hunger-free-backend.onrender.com/api/auth/register", { name, email, password, role });
             setMessage("✅ Registration Successful! Redirecting...");
             setTimeout(() => navigate("/login"), 2000);
         } catch (error) {
