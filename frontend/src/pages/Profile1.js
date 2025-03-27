@@ -96,7 +96,7 @@ const Profile = () => {
         setIsLoading(true);
         try {
             const response = await axios.put(
-                "http://localhost:5000/api/users/profile",
+                "https://hunger-free-backend.onrender.com/api/users/profile",
                 { name: userName, email: userEmail },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -116,10 +116,10 @@ const Profile = () => {
             try {
                 setIsLoading(true);
                 const [donationsRes, requestsRes] = await Promise.all([
-                    axios.get("http://localhost:5000/api/donations/history", {
+                    axios.get("https://hunger-free-backend.onrender.com/api/donations/history", {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
-                    axios.get("http://localhost:5000/api/requests/my-requests", {
+                    axios.get("https://hunger-free-backend.onrender.com/api/requests/my-requests", {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
                 ]);

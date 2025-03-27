@@ -23,7 +23,7 @@ const Requests = () => {
         const fetchRequests = async () => {
             try {
                 setIsLoading(true);
-                const response = await axios.get("http://localhost:5000/api/requests", {
+                const response = await axios.get("https://hunger-free-backend.onrender.com/api/requests", {
                     headers: { "Content-Type": "application/json" }
                 });
 

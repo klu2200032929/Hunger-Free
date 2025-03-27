@@ -69,13 +69,13 @@ const AdminDashboard = () => {
             try {
                 setIsLoading(true);
                 const [usersRes, donationsRes, requestsRes] = await Promise.all([
-                    axios.get("http://localhost:5000/api/admin/users", { 
+                    axios.get("https://hunger-free-backend.onrender.com/api/admin/users", { 
                         headers: { Authorization: `Bearer ${token}` } 
                     }),
-                    axios.get("http://localhost:5000/api/donations/history", { 
+                    axios.get("https://hunger-free-backend.onrender.com/api/donations/history", { 
                         headers: { Authorization: `Bearer ${token}` } 
                     }), 
-                    axios.get("http://localhost:5000/api/requests", { 
+                    axios.get("https://hunger-free-backend.onrender.com/api/requests", { 
                         headers: { Authorization: `Bearer ${token}` } 
                     })
                 ]);
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
     const handleDeleteRequest = async (id) => {
         if (!window.confirm("Are you sure you want to delete this request?")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/requests/${id}`, { 
+            await axios.delete(`https://hunger-free-backend.onrender.com/api/requests/${id}`, { 
                 headers: { Authorization: `Bearer ${token}` } 
             });
             setRequests(requests.filter(req => req._id !== id));
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
     const handleDeleteDonation = async (id) => {
         if (!window.confirm("Are you sure you want to delete this donation?")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/donations/${id}`, { 
+            await axios.delete(`https://hunger-free-backend.onrender.com/api/donations/${id}`, { 
                 headers: { Authorization: `Bearer ${token}` }
             });
             setDonations(donations.filter(donation => donation._id !== id));
@@ -122,7 +122,7 @@ const AdminDashboard = () => {
     const handleDeleteUser = async (id) => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/admin/users/${id}`, { 
+            await axios.delete(`https://hunger-free-backend.onrender.com/api/admin/users/${id}`, { 
                 headers: { Authorization: `Bearer ${token}` } 
             });
             setUsers(users.filter(user => user._id !== id));

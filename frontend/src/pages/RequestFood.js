@@ -98,7 +98,7 @@ const RequestFood = () => {
         }
 
         setIsLoading(true);
-        axios.get("http://localhost:5000/api/donations/")
+        axios.get("https://hunger-free-backend.onrender.com/api/donations/")
             .then((response) => {
                 setAvailableDonations(response.data);
                 setIsLoading(false);
@@ -129,7 +129,7 @@ const RequestFood = () => {
             }
 
             const response = await axios.post(
-                "http://localhost:5000/api/requests/create", 
+                "https://hunger-free-backend.onrender.com/api/requests/create", 
                 { foodItem, quantityNeeded },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

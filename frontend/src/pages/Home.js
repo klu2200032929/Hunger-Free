@@ -7,7 +7,7 @@ const Home = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/donations/")
+        axios.get("https://hunger-free-backend.onrender.com/api/donations/")
             .then((response) => {
                 setDonations(response.data);
                 setIsLoading(false);

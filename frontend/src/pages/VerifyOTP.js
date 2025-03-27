@@ -13,7 +13,7 @@ const VerifyOTP = () => {
         e.preventDefault();
         try {
             await axios.post(
-                "http://localhost:5000/api/requests/verify-otp",
+                "https://hunger-free-backend.onrender.com/api/requests/verify-otp",
                 { requestId, otp },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

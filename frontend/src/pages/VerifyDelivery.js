@@ -12,7 +12,7 @@ const VerifyDelivery = () => {
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/requests/pending", {
+                const response = await axios.get("https://hunger-free-backend.onrender.com/api/requests/pending", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setRequests(response.data);
