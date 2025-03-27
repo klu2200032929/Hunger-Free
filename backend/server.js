@@ -83,6 +83,10 @@ app.use((err, req, res, next) => {
     console.error("❌ Server Error:", err.message);
     res.status(500).json({ message: "Server Error", error: err.message });
 });
+app.use(cors({
+    origin: ["https://hunger-free-tomorrow.netlify.app/"], // Replace with your Netlify URL
+    credentials: true
+}));
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
