@@ -72,7 +72,8 @@ const AdminDashboard = () => {
                     axios.get("https://hunger-free-backend.onrender.com/api/admin/users", { 
                         headers: { Authorization: `Bearer ${token}` } 
                     }),
-                    axios.get("https://hunger-free-backend.onrender.com/api/donations/history", { 
+                    // Changed from /api/donations/history to /api/donations
+                    axios.get("https://hunger-free-backend.onrender.com/api/donations", { 
                         headers: { Authorization: `Bearer ${token}` } 
                     }), 
                     axios.get("https://hunger-free-backend.onrender.com/api/requests", { 
@@ -93,18 +94,7 @@ const AdminDashboard = () => {
         fetchData();
     }, [token]);
 
-    const handleDeleteRequest = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this request?")) return;
-        try {
-            await axios.delete(`https://hunger-free-backend.onrender.com/api/requests/${id}`, { 
-                headers: { Authorization: `Bearer ${token}` } 
-            });
-            setRequests(requests.filter(req => req._id !== id));
-        } catch (error) {
-            console.error("Error deleting request:", error);
-            alert("Failed to delete request");
-        }
-    };
+    
 
     const handleDeleteDonation = async (id) => {
         if (!window.confirm("Are you sure you want to delete this donation?")) return;
@@ -118,6 +108,20 @@ const AdminDashboard = () => {
             alert("Failed to delete donation");
         }
     };
+    const handleDeleteRequest = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this request?")) return;
+        try {
+            await axios.delete(`https://hunger-free-backend.onrender.com/api/requests/${id}`, { 
+                headers: { Authorization: `Bearer ${token}` } 
+            });
+            setRequests(requests.filter(req => req._id !== id));
+        } catch (error) {
+            console.error("Error deleting request:", error);
+            alert("Failed to delete request");
+        }
+    };
+
+    
 
     const handleDeleteUser = async (id) => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;

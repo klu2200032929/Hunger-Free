@@ -1,11 +1,10 @@
 const Donation = require("../models/Donation");
-const DonationHistory = require("../models/DonationHistory"); // ✅ Import DonationHistory
+const DonationHistory = require("../models/DonationHistory");
 
 const createDonation = async (req, res) => {
     try {
         const { foodItem, quantity, pickupLocation } = req.body;
 
-        // ✅ Save donation in the active Donation table
         const donation = await Donation.create({
             donor: req.user._id,
             foodItem,
@@ -13,8 +12,8 @@ const createDonation = async (req, res) => {
             pickupLocation,
         });
 
-        // ✅ Save a copy in the DonationHistory table (Permanently stored)
         await DonationHistory.create({
+            _id: donation._id, // Use same ID for easy deletion
             donor: req.user._id,
             foodItem,
             quantity,
@@ -27,44 +26,53 @@ const createDonation = async (req, res) => {
     }
 };
 
-// ✅ Fetch only active donations (quantity > 0)
 const getAllDonations = async (req, res) => {
     try {
-        const donations = await Donation.find({ quantity: { $gt: 0 }, status: "available" }).populate("donor", "name email");
+        const donations = await Donation.find({ quantity: { $gt: 0 }, status: "available" })
+            .populate("donor", "name email");
         res.json(donations);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
 
-// ✅ Fetch all donations from history table (permanent record)
 const getDonationHistory = async (req, res) => {
     try {
-        const donationHistory = await DonationHistory.find({}).populate("donor", "name email");
+        const donationHistory = await DonationHistory.find({})
+            .populate("donor", "name email");
         res.json(donationHistory);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
+
 const deleteDonation = async (req, res) => {
     try {
-        // ✅ Delete from both tables using the correct _id
         const donation = await Donation.findByIdAndDelete(req.params.id);
-        const historyDeletion = await DonationHistory.deleteMany({ donor: donation.donor, foodItem: donation.foodItem, pickupLocation: donation.pickupLocation });
-
         if (!donation) {
-            return res.status(404).json({ message: "❌ Donation not found in active donations table" });
+            return res.status(404).json({ message: "Donation not found" });
         }
-
-        res.json({ message: "✅ Donation deleted from both active and history tables successfully" });
+        
+        // Delete corresponding history record using same ID
+        await DonationHistory.findByIdAndDelete(req.params.id);
+        
+        res.json({ message: "Donation deleted from both tables" });
     } catch (error) {
-        console.error("❌ Error deleting donation:", error.message);
-        res.status(500).json({ message: "❌ Server Error", error: error.message });
+        res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
 
-
-
+const deleteDonationHistory = async (req, res) => {
+    try {
+        const historyItem = await DonationHistory.findByIdAndDelete(req.params.id);
+        if (!historyItem) {
+            return res.status(404).json({ message: "History record not found" });
+        }
+        res.json({ message: "History record deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
 
 const getUserDonations = async (req, res) => {
     try {
@@ -74,18 +82,22 @@ const getUserDonations = async (req, res) => {
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
+
 const getUserDonationsHistory = async (req, res) => {
     try {
-        // ✅ Fetch only the donations where `donor` matches the logged-in user's ID
-        const donations = await Donation.find({ donor: req.user._id });
-
+        const donations = await DonationHistory.find({ donor: req.user._id });
         res.json(donations);
     } catch (error) {
-        console.error("❌ Error fetching donation history:", error.message);
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
 
-
-
-module.exports = { createDonation, getAllDonations, getDonationHistory, deleteDonation, getUserDonations, getUserDonationsHistory };
+module.exports = {
+    createDonation,
+    getAllDonations,
+    getDonationHistory,
+    deleteDonation,
+    deleteDonationHistory,
+    getUserDonations,
+    getUserDonationsHistory
+};
